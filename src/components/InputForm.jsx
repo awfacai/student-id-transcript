@@ -128,11 +128,18 @@ export default function InputForm({ data, onChange }) {
         <input type="file" accept="image/*" onChange={handlePhotoUpload} />
         <div className="mt-2 flex items-center space-x-4">
           {data.photo && (
-            <img
-              src={data.photo}
-              alt="preview"
-              className="w-20 h-20 rounded-full border object-cover"
-            />
+<img
+  src={
+    typeof data.photo === "string"
+      ? data.photo
+      : data.photo
+      ? URL.createObjectURL(data.photo)
+      : "/default-avatar.png"
+  }
+  alt="学生照片"
+  className="w-full h-full object-cover"
+/>
+
           )}
           <button
             type="button"
