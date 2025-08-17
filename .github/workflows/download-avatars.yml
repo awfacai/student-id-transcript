@@ -1,0 +1,33 @@
+name: Download Avatars
+
+on:
+  workflow_dispatch: # 手动触发
+  push:
+    branches: [ main ]
+
+jobs:
+  download-avatars:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Download Avatars
+        run: node scripts/download-avatars.js
+
+      - name: Commit and push avatars
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add public/avatars/men
+          git commit -m "Add/update avatars" || echo "No changes to commit"
+          git push
