@@ -36,7 +36,7 @@ export default function TranscriptPreview({ data }) {
           <img src="/logo.png" alt="logo" className="h-14" />
           <div>
             <h3 className="text-xl font-bold">
-              Indian Institute of Technology Bombay
+              FIITJEE Hyderabad
             </h3>
             <p className="text-sm text-gray-700">Faculty of Medicine</p>
             <p className="text-sm text-gray-600">Official Academic Transcript</p>
@@ -99,7 +99,7 @@ export default function TranscriptPreview({ data }) {
         {/* 签名和日期 */}
         <div className="text-sm mt-6">
           <p>Registrar, Faculty of Medicine</p>
-          <p>Indian Institute of Technology Bombay</p>
+          <p>FIITJEE Hyderabad</p>
           <p>Date: {data.date || "2024-03-01"}</p>
         </div>
       </div>
