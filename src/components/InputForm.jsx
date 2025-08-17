@@ -1,13 +1,7 @@
-import { useState } from "react";
-
 export default function InputForm({ data, onChange }) {
-  const [formData, setFormData] = useState(data);
-
-  // 统一更新状态
+  // 更新字段
   const updateField = (field, value) => {
-    const newData = { ...formData, [field]: value };
-    setFormData(newData);
-    onChange(newData);
+    onChange({ ...data, [field]: value });
   };
 
   // 上传头像
@@ -16,16 +10,32 @@ export default function InputForm({ data, onChange }) {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        updateField("photo", reader.result); // base64
+        updateField("photo", reader.result);
       };
       reader.readAsDataURL(file);
     }
   };
 
-  // 生成随机头像（DiceBear）
+  // 随机头像 (DiceBear)
   const generateRandomAvatar = () => {
     const seed = Math.random().toString(36).substring(7);
     return `https://avatars.dicebear.com/api/adventurer/${seed}.svg`;
+  };
+
+  // 一键随机生成所有信息
+  const generateRandomAll = () => {
+    const randomId = "INT" + Math.floor(Math.random() * 1000000);
+    const majors = ["Computer Science", "Mechanical Eng.", "Mathematics", "Physics"];
+    const firstNames = ["Anand", "Meera", "Ravi", "Erick", "Sophia"];
+    const lastNames = ["Kumar", "Sharma", "Singh", "Patel", "Verma"];
+
+    onChange({
+      firstName: firstNames[Math.floor(Math.random() * firstNames.length)],
+      lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
+      id: randomId,
+      major: majors[Math.floor(Math.random() * majors.length)],
+      photo: generateRandomAvatar(),
+    });
   };
 
   return (
@@ -44,7 +54,7 @@ export default function InputForm({ data, onChange }) {
         <label className="block text-sm font-medium">First Name*</label>
         <input
           type="text"
-          value={formData.firstName || ""}
+          value={data.firstName}
           onChange={(e) => updateField("firstName", e.target.value)}
           className="w-full border rounded px-3 py-2"
         />
@@ -54,7 +64,7 @@ export default function InputForm({ data, onChange }) {
         <label className="block text-sm font-medium">Last Name*</label>
         <input
           type="text"
-          value={formData.lastName || ""}
+          value={data.lastName}
           onChange={(e) => updateField("lastName", e.target.value)}
           className="w-full border rounded px-3 py-2"
         />
@@ -64,7 +74,7 @@ export default function InputForm({ data, onChange }) {
         <label className="block text-sm font-medium">学号</label>
         <input
           type="text"
-          value={formData.id || ""}
+          value={data.id}
           onChange={(e) => updateField("id", e.target.value)}
           className="w-full border rounded px-3 py-2"
         />
@@ -74,20 +84,20 @@ export default function InputForm({ data, onChange }) {
         <label className="block text-sm font-medium">专业</label>
         <input
           type="text"
-          value={formData.major || ""}
+          value={data.major}
           onChange={(e) => updateField("major", e.target.value)}
           className="w-full border rounded px-3 py-2"
         />
       </div>
 
-      {/* 照片上传 + 随机头像 */}
+      {/* 照片 */}
       <div>
         <label className="block text-sm font-medium">照片</label>
         <input type="file" accept="image/*" onChange={handlePhotoUpload} />
         <div className="mt-2 flex items-center space-x-4">
-          {formData.photo && (
+          {data.photo && (
             <img
-              src={formData.photo}
+              src={data.photo}
               alt="preview"
               className="w-20 h-20 rounded-full border object-cover"
             />
@@ -101,6 +111,15 @@ export default function InputForm({ data, onChange }) {
           </button>
         </div>
       </div>
+
+      {/* 一键随机 */}
+      <button
+        type="button"
+        onClick={generateRandomAll}
+        className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg mt-4"
+      >
+        🎲 一键随机生成所有信息
+      </button>
     </form>
   );
 }
