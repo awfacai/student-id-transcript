@@ -1,5 +1,4 @@
 export default function InputForm({ data, onChange }) {
-  // 更新字段
   const updateField = (field, value) => {
     onChange({ ...data, [field]: value });
   };
@@ -16,13 +15,14 @@ export default function InputForm({ data, onChange }) {
     }
   };
 
-  // 随机头像 (DiceBear)
+  // 真人随机头像
   const generateRandomAvatar = () => {
-    const seed = Math.random().toString(36).substring(7);
-    return `https://avatars.dicebear.com/api/adventurer/${seed}.svg`;
+    const gender = Math.random() > 0.5 ? "men" : "women";
+    const id = Math.floor(Math.random() * 90); // 0 - 89
+    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
   };
 
-  // 一键随机生成所有信息
+  // 一键随机生成资料
   const generateRandomAll = () => {
     const randomId = "INT" + Math.floor(Math.random() * 1000000);
     const majors = ["Computer Science", "Mechanical Eng.", "Mathematics", "Physics"];
