@@ -43,12 +43,18 @@ export default function TranscriptPreview({ data }) {
           </div>
         </div>
 
-        {/* 学生基本信息 */}
-        <div className="mb-4 text-sm">
-          <p><strong>Name:</strong> {data.name || "未填写"}</p>
-          <p><strong>Student ID:</strong> {data.id || "未填写"}</p>
-          <p><strong>Semester:</strong> {data.semester || "Dec 2023 – Feb 2024"}</p>
-        </div>
+{/* 学生基本信息 */}
+<div className="mb-4 text-sm">
+  <p>
+    <strong>Name:</strong>{" "}
+    {data.firstName || data.lastName
+      ? `${data.firstName || ""} ${data.lastName || ""}`
+      : "未填写"}
+  </p>
+  <p><strong>Student ID:</strong> {data.id || "未填写"}</p>
+  <p><strong>Semester:</strong> {data.semester || "Dec 2023 – Feb 2024"}</p>
+</div>
+
 
         {/* 成绩表 */}
         <table className="w-full text-sm text-left border mb-4">
