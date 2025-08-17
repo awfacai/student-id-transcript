@@ -22,11 +22,12 @@ export default function InputForm({ onChange }) {
     onChange && onChange(updated);
   };
 
-  // 🔄 随机头像生成（只用真人头像）
+  // 🔄 随机头像（只真人像）
   const randomAvatar = () => {
     const gender = Math.random() > 0.5 ? "men" : "women";
     const id = Math.floor(Math.random() * 90); // 0-89
-    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+    // 每次生成不同的 URL，避免浏览器缓存
+    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg?rand=${Date.now()}`;
   };
 
   // 🔄 随机单个字段
@@ -142,14 +143,16 @@ export default function InputForm({ onChange }) {
         </div>
       </div>
 
-      {/* 照片 */}
+      {/* 照片 + 预览 */}
       <div>
         <label className="block font-medium mb-1">照片</label>
         <div className="flex items-center space-x-2">
           <input
             type="file"
             accept="image/*"
-            onChange={(e) => updateField("photo", e.target.files[0])}
+            onChange={(e) =>
+              updateField("photo", URL.createObjectURL(e.target.files[0]))
+            }
             className="flex-1 border rounded p-2"
           />
           <button
@@ -160,6 +163,13 @@ export default function InputForm({ onChange }) {
             🔄
           </button>
         </div>
+        {formData.photo && (
+          <img
+            src={formData.photo}
+            alt="preview"
+            className="mt-2 w-24 h-24 object-cover rounded-full border"
+          />
+        )}
       </div>
 
       {/* 一键填充 */}
