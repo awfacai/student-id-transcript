@@ -33,7 +33,7 @@ export default function TranscriptPreview({ data }) {
       <div ref={transcriptRef} className="border p-6 rounded-lg">
         {/* 顶部 logo 和标题 */}
         <div className="flex items-center space-x-3 mb-4">
-          <img src="/logo.png" alt="logo" className="h-14" />
+          <img src="/f705e98a85cb3546a742c85144d4d946.png" alt="logo" className="h-14" />
           <div>
             <h3 className="text-xl font-bold">
               FIITJEE Hyderabad
