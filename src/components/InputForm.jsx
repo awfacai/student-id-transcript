@@ -3,6 +3,13 @@ import { useState } from "react";
 export default function InputForm({ data, setData }) {
   const [loadingPhoto, setLoadingPhoto] = useState(false);
 
+  // 复制函数
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("已复制: " + text);
+    });
+  };
+
   // 随机头像
   const generateRandomPhoto = async () => {
     setLoadingPhoto(true);
@@ -29,7 +36,7 @@ export default function InputForm({ data, setData }) {
     reader.readAsDataURL(file);
   };
 
-  // 随机生成所有信息
+  // 一键随机生成
   const generateRandomData = async () => {
     try {
       const res = await fetch("https://randomuser.me/api/");
@@ -38,7 +45,8 @@ export default function InputForm({ data, setData }) {
 
       setData({
         ...data,
-        name: `${user.name.first} ${user.name.last}`,
+        firstName: user.name.first,
+        lastName: user.name.last,
         id: "ID" + Math.random().toString(36).substring(2, 8).toUpperCase(),
         major: "Computer Science",
         photo: user.picture.large,
@@ -61,26 +69,64 @@ export default function InputForm({ data, setData }) {
         />
       </div>
 
-      {/* 姓名 */}
+      {/* First Name */}
       <div>
-        <label className="block font-medium mb-1">姓名</label>
-        <input
-          type="text"
-          value={data.name}
-          onChange={(e) => setData({ ...data, name: e.target.value })}
-          className="w-full border rounded px-3 py-2"
-        />
+        <label className="block font-medium mb-1">First Name*</label>
+        <div className="flex">
+          <input
+            type="text"
+            value={data.firstName}
+            onChange={(e) => setData({ ...data, firstName: e.target.value })}
+            className="flex-1 border rounded-l px-3 py-2"
+          />
+          <button
+            type="button"
+            onClick={() => copyToClipboard(data.firstName)}
+            className="px-3 bg-gray-200 rounded-r"
+          >
+            📋
+          </button>
+        </div>
+      </div>
+
+      {/* Last Name */}
+      <div>
+        <label className="block font-medium mb-1">Last Name*</label>
+        <div className="flex">
+          <input
+            type="text"
+            value={data.lastName}
+            onChange={(e) => setData({ ...data, lastName: e.target.value })}
+            className="flex-1 border rounded-l px-3 py-2"
+          />
+          <button
+            type="button"
+            onClick={() => copyToClipboard(data.lastName)}
+            className="px-3 bg-gray-200 rounded-r"
+          >
+            📋
+          </button>
+        </div>
       </div>
 
       {/* 学号 */}
       <div>
         <label className="block font-medium mb-1">学号</label>
-        <input
-          type="text"
-          value={data.id}
-          onChange={(e) => setData({ ...data, id: e.target.value })}
-          className="w-full border rounded px-3 py-2"
-        />
+        <div className="flex">
+          <input
+            type="text"
+            value={data.id}
+            onChange={(e) => setData({ ...data, id: e.target.value })}
+            className="flex-1 border rounded-l px-3 py-2"
+          />
+          <button
+            type="button"
+            onClick={() => copyToClipboard(data.id)}
+            className="px-3 bg-gray-200 rounded-r"
+          >
+            📋
+          </button>
+        </div>
       </div>
 
       {/* 专业 */}
