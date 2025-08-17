@@ -1,16 +1,16 @@
 import { useState } from "react";
 
-export default function InputForm({ onChange, onRandom }) {
-  const [photoPreview, setPhotoPreview] = useState(null);
+export default function InputForm({ onChange, onRandom, data }) {
+  const [photoPreview, setPhotoPreview] = useState(data.photo);
 
-  // 处理文件上传（头像）
+  // 文件上传
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (ev) => {
         setPhotoPreview(ev.target.result);
-        onChange("photo", ev.target.result); // 通知父组件
+        onChange("photo", ev.target.result);
       };
       reader.readAsDataURL(file);
     }
@@ -19,7 +19,7 @@ export default function InputForm({ onChange, onRandom }) {
   // 随机头像
   const handleRandomPhoto = () => {
     const gender = Math.random() > 0.5 ? "men" : "women";
-    const id = Math.floor(Math.random() * 90); // 0-89
+    const id = Math.floor(Math.random() * 90);
     const url = `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
     setPhotoPreview(url);
     onChange("photo", url);
@@ -27,7 +27,7 @@ export default function InputForm({ onChange, onRandom }) {
 
   return (
     <div className="space-y-4">
-      {/* 大学名称 */}
+      {/* 大学 */}
       <div>
         <label className="block font-medium mb-1">大学</label>
         <input
@@ -43,6 +43,7 @@ export default function InputForm({ onChange, onRandom }) {
         <label className="block font-medium mb-1">姓名</label>
         <input
           type="text"
+          value={data.name}
           onChange={(e) => onChange("name", e.target.value)}
           className="w-full border rounded p-2"
         />
@@ -53,6 +54,7 @@ export default function InputForm({ onChange, onRandom }) {
         <label className="block font-medium mb-1">学号</label>
         <input
           type="text"
+          value={data.id}
           onChange={(e) => onChange("id", e.target.value)}
           className="w-full border rounded p-2"
         />
@@ -63,16 +65,16 @@ export default function InputForm({ onChange, onRandom }) {
         <label className="block font-medium mb-1">专业</label>
         <input
           type="text"
+          value={data.major}
           onChange={(e) => onChange("major", e.target.value)}
           className="w-full border rounded p-2"
         />
       </div>
 
-      {/* 照片上传 */}
+      {/* 照片 */}
       <div>
         <label className="block font-medium mb-1">照片</label>
         <input type="file" accept="image/*" onChange={handleFileChange} />
-        {/* 头像预览 */}
         {photoPreview && (
           <img
             src={photoPreview}
@@ -82,7 +84,7 @@ export default function InputForm({ onChange, onRandom }) {
         )}
       </div>
 
-      {/* 随机生成按钮 */}
+      {/* 按钮 */}
       <div className="flex space-x-2">
         <button
           type="button"
