@@ -1,3 +1,8 @@
+import { useState } from "react";
+import InputForm from "./components/InputForm";
+import IDCardPreview from "./components/IDCardPreview";
+import TranscriptPreview from "./components/TranscriptPreview";
+
 export default function App() {
   return (
     <div className="min-h-screen bg-gray-100">
