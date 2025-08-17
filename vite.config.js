@@ -3,5 +3,14 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  base: "./",   // 🔑 关键修复
+  base: "./",
+  server: {
+    proxy: {
+      "/api": {
+        target: "https://randomuser.me",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ""),
+      },
+    },
+  },
 });
