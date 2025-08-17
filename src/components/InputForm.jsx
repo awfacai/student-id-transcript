@@ -17,10 +17,10 @@ export default function InputForm({ onChange, onRandom, data }) {
   };
 
   // 随机头像
-  const handleRandomPhoto = () => {
-    const gender = Math.random() > 0.5 ? "men" : "women";
-    const id = Math.floor(Math.random() * 90);
-    const url = `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+  const handleRandomPhoto = async () => {
+    const res = await fetch("https://randomuser.me/api/");
+    const user = await res.json();
+    const url = user.results[0].picture.large;
     setPhotoPreview(url);
     onChange("photo", url);
   };
@@ -85,18 +85,18 @@ export default function InputForm({ onChange, onRandom, data }) {
       </div>
 
       {/* 按钮 */}
-      <div className="flex space-x-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <button
           type="button"
           onClick={onRandom}
-          className="w-full bg-blue-600 text-white p-2 rounded"
+          className="flex-1 bg-blue-600 text-white p-2 rounded"
         >
           🎲 一键随机生成所有信息
         </button>
         <button
           type="button"
           onClick={handleRandomPhoto}
-          className="bg-gray-600 text-white p-2 rounded"
+          className="flex-1 bg-gray-600 text-white p-2 rounded"
         >
           🔄 随机头像
         </button>
