@@ -13,10 +13,10 @@ export default function InputForm({ data, onChange }) {
     }
   };
 
-  // ✅ 使用 student.frp.gs 的头像源
+  // ✅ 使用本地 public/avatars/men 的头像
   const generateRandomAvatar = () => {
     const id = Math.floor(Math.random() * 99) + 1; // 1 - 99
-    return `https://student.frp.gs/static/image/men/${id}.jpg`;
+    return `/avatars/men/${id}.jpg`; // 直接引用 public 下的文件
   };
 
   // 一键随机生成资料
@@ -31,11 +31,11 @@ export default function InputForm({ data, onChange }) {
       lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
       id: randomId,
       major: majors[Math.floor(Math.random() * majors.length)],
-      photo: generateRandomAvatar(), // ✅ 直接拼接 URL
+      photo: generateRandomAvatar(), // ✅ 本地头像
     });
   };
 
-  // 复制功能（静默复制，不弹窗）
+  // 复制功能（静默复制）
   const copyToClipboard = (text) => {
     if (!text) return;
     navigator.clipboard.writeText(text).catch((err) => console.error("复制失败", err));
