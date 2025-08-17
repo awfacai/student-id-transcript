@@ -18,17 +18,18 @@ export default function InputForm({ data, onChange }) {
   };
 
   // 真人随机头像 (异步函数)
-  const generateRandomAvatar = async () => {
-    try {
-      const response = await fetch("https://randomuser.me/api/");
-      const data = await response.json();
-      const photoUrl = data.results[0].picture.large;
-      return photoUrl;
-    } catch (error) {
-      console.error("Failed to fetch random avatar:", error);
-      return null;
-    }
-  };
+const generateRandomAvatar = async () => {
+  try {
+    // 使用代理路径
+    const response = await fetch("/api/");
+    const data = await response.json();
+    const photoUrl = data.results[0].picture.large;
+    return photoUrl;
+  } catch (error) {
+    console.error("Failed to fetch random avatar:", error);
+    return null;
+  }
+};
 
   // 一键随机生成资料 (异步函数)
   const generateRandomAll = async () => {
