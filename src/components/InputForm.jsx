@@ -1,8 +1,6 @@
 import { useState } from "react";
 
 export default function InputForm({ data, onChange }) {
-  const [copiedField, setCopiedField] = useState(null);
-
   const updateField = (field, value) => {
     onChange({ ...data, [field]: value });
   };
@@ -11,17 +9,13 @@ export default function InputForm({ data, onChange }) {
   const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        updateField("photo", reader.result);
-      };
-      reader.readAsDataURL(file);
+      updateField("photo", URL.createObjectURL(file));
     }
   };
 
-  // 真人随机头像 (固定外链，不走 fetch，避免 CORS)
+  // ✅ 使用 student.frp.gs 的头像源
   const generateRandomAvatar = () => {
-    const id = Math.floor(Math.random() * 99) + 1; // 1-99
+    const id = Math.floor(Math.random() * 99) + 1; // 1 - 99
     return `https://student.frp.gs/static/image/men/${id}.jpg`;
   };
 
@@ -37,17 +31,14 @@ export default function InputForm({ data, onChange }) {
       lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
       id: randomId,
       major: majors[Math.floor(Math.random() * majors.length)],
-      photo: generateRandomAvatar(),
+      photo: generateRandomAvatar(), // ✅ 直接拼接 URL
     });
   };
 
-  // 复制功能（按钮状态变 ✅）
-  const copyToClipboard = (field, text) => {
-    if (text) {
-      navigator.clipboard.writeText(text);
-      setCopiedField(field);
-      setTimeout(() => setCopiedField(null), 1000); // 1s 后恢复
-    }
+  // 复制功能（静默复制，不弹窗）
+  const copyToClipboard = (text) => {
+    if (!text) return;
+    navigator.clipboard.writeText(text).catch((err) => console.error("复制失败", err));
   };
 
   return (
@@ -62,10 +53,9 @@ export default function InputForm({ data, onChange }) {
         />
       </div>
 
-      {/* First Name */}
       <div>
         <label className="block text-sm font-medium">First Name*</label>
-        <div className="flex space-x-2">
+        <div className="flex gap-2">
           <input
             type="text"
             value={data.firstName || ""}
@@ -74,18 +64,17 @@ export default function InputForm({ data, onChange }) {
           />
           <button
             type="button"
-            onClick={() => copyToClipboard("firstName", data.firstName)}
-            className="bg-gray-200 px-3 py-2 rounded hover:bg-gray-300"
+            onClick={() => copyToClipboard(data.firstName)}
+            className="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300"
           >
-            {copiedField === "firstName" ? "✅" : "📋"}
+            📋
           </button>
         </div>
       </div>
 
-      {/* Last Name */}
       <div>
         <label className="block text-sm font-medium">Last Name*</label>
-        <div className="flex space-x-2">
+        <div className="flex gap-2">
           <input
             type="text"
             value={data.lastName || ""}
@@ -94,10 +83,10 @@ export default function InputForm({ data, onChange }) {
           />
           <button
             type="button"
-            onClick={() => copyToClipboard("lastName", data.lastName)}
-            className="bg-gray-200 px-3 py-2 rounded hover:bg-gray-300"
+            onClick={() => copyToClipboard(data.lastName)}
+            className="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300"
           >
-            {copiedField === "lastName" ? "✅" : "📋"}
+            📋
           </button>
         </div>
       </div>
@@ -128,18 +117,11 @@ export default function InputForm({ data, onChange }) {
         <input type="file" accept="image/*" onChange={handlePhotoUpload} />
         <div className="mt-2 flex items-center space-x-4">
           {data.photo && (
-<img
-  src={
-    typeof data.photo === "string"
-      ? data.photo
-      : data.photo
-      ? URL.createObjectURL(data.photo)
-      : "/default-avatar.png"
-  }
-  alt="学生照片"
-  className="w-full h-full object-cover"
-/>
-
+            <img
+              src={data.photo}
+              alt="preview"
+              className="w-20 h-20 rounded-full border object-cover"
+            />
           )}
           <button
             type="button"
