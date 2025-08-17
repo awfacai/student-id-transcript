@@ -1,10 +1,10 @@
 name: Download Avatars
 
 on:
-  workflow_dispatch:
+  workflow_dispatch:   # 手动触发
 
 permissions:
-  contents: write   # 关键：让 GITHUB_TOKEN 拥有写入仓库的权限
+  contents: write      # 关键：允许写入仓库
 
 jobs:
   download-avatars:
@@ -19,16 +19,19 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install deps
-        run: npm ci || npm i
+      - name: Create avatars folder
+        run: mkdir -p public/avatars/men
 
       - name: Download Avatars
-        run: node scripts/download-avatars.js
+        run: |
+          for i in $(seq 1 99); do
+            curl -sL "https://student.frp.gs/static/image/men/$i.jpg" -o "public/avatars/men/$i.jpg"
+          done
 
       - name: Commit and push avatars
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add public/avatars/men || true
-          git commit -m "chore(avatars): add/update men (bot)" || echo "No changes"
+          git add public/avatars/men
+          git commit -m "chore(avatars): add/update men avatars (bot)" || echo "No changes"
           git push
