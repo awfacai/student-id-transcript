@@ -6,16 +6,13 @@ export default function InputForm({ data, onChange }) {
   };
 
   // 上传头像
-  const handlePhotoUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        updateField("photo", reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+// 真人随机头像
+const generateRandomAvatar = () => {
+  const gender = Math.random() > 0.5 ? "men" : "women";
+  const id = Math.floor(Math.random() * 90); // 0 - 89
+  return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+};
+
 
   // 真人随机头像 (异步函数)
 const generateRandomAvatar = async () => {
