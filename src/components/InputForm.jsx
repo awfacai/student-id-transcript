@@ -7,60 +7,66 @@ export default function InputForm({ onChange }) {
     name: "",
     id: "",
     faculty: "",
-    issueDate: "2023-12-27",
-    validUntil: "2027-12-27",
-    logo: null,
+    issueDate: "",
+    validUntil: "",
     photo: null,
+    logo: "/iitb_logo.png", // 固定 IITB 校徽
   });
 
-  const handleChange = (field, value) => {
-    const updated = { ...form, [field]: value };
+  // 更新字段
+  const handleChange = (key, value) => {
+    const updated = { ...form, [key]: value };
     setForm(updated);
-    onChange && onChange(updated);
+    onChange(updated);
   };
 
-  // 随机生成字段
-  const randomField = (field) => {
+  // 随机单个字段
+  const randomField = (key) => {
     let value = "";
-    switch (field) {
+    switch (key) {
       case "name":
         value = faker.person.fullName();
         break;
       case "id":
-        value = "INT" + faker.number.int({ min: 100000, max: 999999 });
+        value = faker.string.alphanumeric(8).toUpperCase();
         break;
       case "faculty":
-        value = faker.word.words(2);
+        value = faker.commerce.department();
+        break;
+      case "issueDate":
+        value = faker.date.past().toISOString().split("T")[0];
+        break;
+      case "validUntil":
+        value = faker.date.future().toISOString().split("T")[0];
+        break;
+      case "photo":
+        value = faker.image.avatar(); // 随机头像
         break;
       default:
-        break;
+        value = form[key];
     }
-    handleChange(field, value);
+    handleChange(key, value);
   };
 
-  // 随机填充全部
+  // 一键随机填充
   const randomAll = () => {
-    const updated = {
-      ...form,
+    const newData = {
+      university: "Indian Institute of Technology Bombay",
       name: faker.person.fullName(),
-      id: "INT" + faker.number.int({ min: 100000, max: 999999 }),
-      faculty: faker.word.words(2),
+      id: faker.string.alphanumeric(8).toUpperCase(),
+      faculty: faker.commerce.department(),
+      issueDate: faker.date.past().toISOString().split("T")[0],
+      validUntil: faker.date.future().toISOString().split("T")[0],
+      photo: faker.image.avatar(),
+      logo: "/iitb_logo.png",
     };
-    setForm(updated);
-    onChange && onChange(updated);
+    setForm(newData);
+    onChange(newData);
   };
 
   return (
-    <div className="space-y-4">
-      <button
-        type="button"
-        onClick={randomAll}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-      >
-        一键随机填充所有信息
-      </button>
-
-      {/* 大学名称 - 固定 */}
+    <form className="space-y-4">
+      {/* 大学名称 - 固定 IITB */}
       <div>
         <label className="block font-medium mb-1">大学名称</label>
         <input
@@ -74,7 +80,7 @@ export default function InputForm({ onChange }) {
       {/* 学生姓名 */}
       <div>
         <label className="block font-medium mb-1">学生姓名</label>
-        <div className="flex">
+        <div className="flex space-x-2">
           <input
             type="text"
             value={form.name}
@@ -84,8 +90,7 @@ export default function InputForm({ onChange }) {
           <button
             type="button"
             onClick={() => randomField("name")}
-            className="ml-2 p-2 rounded bg-gray-200 hover:bg-gray-300"
-            title="随机生成姓名"
+            className="p-2 rounded bg-gray-200 hover:bg-gray-300"
           >
             🔄
           </button>
@@ -95,7 +100,7 @@ export default function InputForm({ onChange }) {
       {/* 学号 */}
       <div>
         <label className="block font-medium mb-1">学号</label>
-        <div className="flex">
+        <div className="flex space-x-2">
           <input
             type="text"
             value={form.id}
@@ -105,8 +110,7 @@ export default function InputForm({ onChange }) {
           <button
             type="button"
             onClick={() => randomField("id")}
-            className="ml-2 p-2 rounded bg-gray-200 hover:bg-gray-300"
-            title="随机生成学号"
+            className="p-2 rounded bg-gray-200 hover:bg-gray-300"
           >
             🔄
           </button>
@@ -116,7 +120,7 @@ export default function InputForm({ onChange }) {
       {/* 专业 */}
       <div>
         <label className="block font-medium mb-1">专业</label>
-        <div className="flex">
+        <div className="flex space-x-2">
           <input
             type="text"
             value={form.faculty}
@@ -126,8 +130,27 @@ export default function InputForm({ onChange }) {
           <button
             type="button"
             onClick={() => randomField("faculty")}
-            className="ml-2 p-2 rounded bg-gray-200 hover:bg-gray-300"
-            title="随机生成专业"
+            className="p-2 rounded bg-gray-200 hover:bg-gray-300"
+          >
+            🔄
+          </button>
+        </div>
+      </div>
+
+      {/* 照片上传 + 随机头像 */}
+      <div>
+        <label className="block font-medium mb-1">照片</label>
+        <div className="flex items-center space-x-2">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => handleChange("photo", e.target.files[0])}
+            className="flex-1 border rounded p-2"
+          />
+          <button
+            type="button"
+            onClick={() => randomField("photo")}
+            className="p-2 rounded bg-gray-200 hover:bg-gray-300"
           >
             🔄
           </button>
@@ -137,46 +160,53 @@ export default function InputForm({ onChange }) {
       {/* 签发日期 */}
       <div>
         <label className="block font-medium mb-1">签发日期</label>
-        <input
-          type="date"
-          value={form.issueDate}
-          onChange={(e) => handleChange("issueDate", e.target.value)}
-          className="w-full border rounded p-2"
-        />
+        <div className="flex space-x-2">
+          <input
+            type="date"
+            value={form.issueDate}
+            onChange={(e) => handleChange("issueDate", e.target.value)}
+            className="flex-1 border rounded p-2"
+          />
+          <button
+            type="button"
+            onClick={() => randomField("issueDate")}
+            className="p-2 rounded bg-gray-200 hover:bg-gray-300"
+          >
+            🔄
+          </button>
+        </div>
       </div>
 
       {/* 有效期至 */}
       <div>
         <label className="block font-medium mb-1">有效期至</label>
-        <input
-          type="date"
-          value={form.validUntil}
-          onChange={(e) => handleChange("validUntil", e.target.value)}
-          className="w-full border rounded p-2"
-        />
+        <div className="flex space-x-2">
+          <input
+            type="date"
+            value={form.validUntil}
+            onChange={(e) => handleChange("validUntil", e.target.value)}
+            className="flex-1 border rounded p-2"
+          />
+          <button
+            type="button"
+            onClick={() => randomField("validUntil")}
+            className="p-2 rounded bg-gray-200 hover:bg-gray-300"
+          >
+            🔄
+          </button>
+        </div>
       </div>
 
-      {/* 上传照片 */}
-      <div>
-        <label className="block font-medium mb-1">上传照片</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => handleChange("photo", e.target.files[0])}
-          className="w-full border rounded p-2"
-        />
+      {/* 一键填充 */}
+      <div className="pt-4">
+        <button
+          type="button"
+          onClick={randomAll}
+          className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
+        >
+          一键随机生成所有信息 🎲
+        </button>
       </div>
-
-      {/* 上传校徽 */}
-      <div>
-        <label className="block font-medium mb-1">上传校徽</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => handleChange("logo", e.target.files[0])}
-          className="w-full border rounded p-2"
-        />
-      </div>
-    </div>
+    </form>
   );
 }
