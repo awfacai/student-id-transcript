@@ -1,6 +1,8 @@
 import { useState } from "react";
 
 export default function InputForm({ data, onChange }) {
+  const [copiedField, setCopiedField] = useState(null);
+
   const updateField = (field, value) => {
     onChange({ ...data, [field]: value });
   };
@@ -17,9 +19,9 @@ export default function InputForm({ data, onChange }) {
     }
   };
 
-  // 真人随机头像 (使用 student.frp.gs)
+  // 真人随机头像 (固定外链，不走 fetch，避免 CORS)
   const generateRandomAvatar = () => {
-    const id = Math.floor(Math.random() * 99) + 1; // 1 - 99
+    const id = Math.floor(Math.random() * 99) + 1; // 1-99
     return `https://student.frp.gs/static/image/men/${id}.jpg`;
   };
 
@@ -39,11 +41,12 @@ export default function InputForm({ data, onChange }) {
     });
   };
 
-  // 复制功能
-  const copyToClipboard = (text) => {
+  // 复制功能（按钮状态变 ✅）
+  const copyToClipboard = (field, text) => {
     if (text) {
       navigator.clipboard.writeText(text);
-      alert("已复制: " + text);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 1000); // 1s 后恢复
     }
   };
 
@@ -71,10 +74,10 @@ export default function InputForm({ data, onChange }) {
           />
           <button
             type="button"
-            onClick={() => copyToClipboard(data.firstName)}
+            onClick={() => copyToClipboard("firstName", data.firstName)}
             className="bg-gray-200 px-3 py-2 rounded hover:bg-gray-300"
           >
-            📋
+            {copiedField === "firstName" ? "✅" : "📋"}
           </button>
         </div>
       </div>
@@ -91,10 +94,10 @@ export default function InputForm({ data, onChange }) {
           />
           <button
             type="button"
-            onClick={() => copyToClipboard(data.lastName)}
+            onClick={() => copyToClipboard("lastName", data.lastName)}
             className="bg-gray-200 px-3 py-2 rounded hover:bg-gray-300"
           >
-            📋
+            {copiedField === "lastName" ? "✅" : "📋"}
           </button>
         </div>
       </div>
