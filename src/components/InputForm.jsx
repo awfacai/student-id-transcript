@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export default function InputForm({ data, onChange }) {
   const updateField = (field, value) => {
     onChange({ ...data, [field]: value });
@@ -16,25 +18,32 @@ export default function InputForm({ data, onChange }) {
   };
 
   // 真人随机头像
-  const generateRandomAvatar = () => {
-    const gender = Math.random() > 0.5 ? "men" : "women";
-    const id = Math.floor(Math.random() * 90); // 0 - 89
-    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+  const generateRandomAvatar = async () => {
+    try {
+      const response = await fetch("https://randomuser.me/api/");
+      const data = await response.json();
+      const photoUrl = data.results[0].picture.large;
+      return photoUrl;
+    } catch (error) {
+      console.error("Failed to fetch random avatar:", error);
+      return null;
+    }
   };
 
   // 一键随机生成资料
-  const generateRandomAll = () => {
+  const generateRandomAll = async () => {
     const randomId = "INT" + Math.floor(Math.random() * 1000000);
     const majors = ["Computer Science", "Mechanical Eng.", "Mathematics", "Physics"];
     const firstNames = ["Anand", "Meera", "Ravi", "Erick", "Sophia"];
     const lastNames = ["Kumar", "Sharma", "Singh", "Patel", "Verma"];
+    const randomPhoto = await generateRandomAvatar();
 
     onChange({
       firstName: firstNames[Math.floor(Math.random() * firstNames.length)],
       lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
       id: randomId,
       major: majors[Math.floor(Math.random() * majors.length)],
-      photo: generateRandomAvatar(),
+      photo: randomPhoto,
     });
   };
 
@@ -104,7 +113,7 @@ export default function InputForm({ data, onChange }) {
           )}
           <button
             type="button"
-            onClick={() => updateField("photo", generateRandomAvatar())}
+            onClick={async () => updateField("photo", await generateRandomAvatar())}
             className="bg-blue-500 text-white px-3 py-2 rounded-lg"
           >
             🎲 随机头像
