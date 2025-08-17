@@ -1,10 +1,25 @@
+import { useState } from "react";
 import { faker } from "@faker-js/faker";
-import { RotateCw } from "lucide-react"; // 一个漂亮的刷新按钮图标
 
-export default function InputForm({ data, setData }) {
-  const handleChange = (field, value) => setData({ ...data, [field]: value });
+export default function InputForm({ onChange }) {
+  const [form, setForm] = useState({
+    university: "Indian Institute of Technology Bombay",
+    name: "",
+    id: "",
+    faculty: "",
+    issueDate: "2023-12-27",
+    validUntil: "2027-12-27",
+    logo: null,
+    photo: null,
+  });
 
-  // 随机生成单个字段
+  const handleChange = (field, value) => {
+    const updated = { ...form, [field]: value };
+    setForm(updated);
+    onChange && onChange(updated);
+  };
+
+  // 随机生成字段
   const randomField = (field) => {
     let value = "";
     switch (field) {
@@ -12,122 +27,156 @@ export default function InputForm({ data, setData }) {
         value = faker.person.fullName();
         break;
       case "id":
-        value = "INT" + faker.string.numeric(6);
+        value = "INT" + faker.number.int({ min: 100000, max: 999999 });
         break;
       case "faculty":
-        value = faker.helpers.arrayElement([
-          "Faculty of Medicine",
-          "Faculty of Engineering",
-          "Faculty of Science",
-          "Faculty of Arts",
-        ]);
+        value = faker.word.words(2);
         break;
       default:
-        value = "";
+        break;
     }
-    setData({ ...data, [field]: value });
+    handleChange(field, value);
   };
 
-  // 随机照片
-  const randomPhoto = () => {
-    setData({ ...data, photo: `https://picsum.photos/200?random=${Date.now()}` });
+  // 随机填充全部
+  const randomAll = () => {
+    const updated = {
+      ...form,
+      name: faker.person.fullName(),
+      id: "INT" + faker.number.int({ min: 100000, max: 999999 }),
+      faculty: faker.word.words(2),
+    };
+    setForm(updated);
+    onChange && onChange(updated);
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
+      <button
+        type="button"
+        onClick={randomAll}
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        一键随机填充所有信息
+      </button>
 
-      {/* 大学名称（固定） */}
-      <div className="border rounded-lg p-4 bg-gray-50 flex items-center justify-between">
-        <div>
-          <label className="block text-sm font-semibold mb-1">大学名称</label>
-          <input
-            value="Indian Institute of Technology Bombay"
-            readOnly
-            className="border rounded p-2 w-full bg-gray-100 text-gray-600"
-          />
-        </div>
-        {data.logo && (
-          <img src={data.logo} alt="logo" className="h-12 ml-4" />
-        )}
+      {/* 大学名称 - 固定 */}
+      <div>
+        <label className="block font-medium mb-1">大学名称</label>
+        <input
+          type="text"
+          value={form.university}
+          readOnly
+          className="w-full border rounded p-2 bg-gray-100"
+        />
       </div>
 
       {/* 学生姓名 */}
-      <div className="border rounded-lg p-4 bg-gray-50 flex items-center">
-        <div className="flex-1">
-          <label className="block text-sm font-semibold mb-1">学生姓名</label>
+      <div>
+        <label className="block font-medium mb-1">学生姓名</label>
+        <div className="flex">
           <input
-            value={data.name}
+            type="text"
+            value={form.name}
             onChange={(e) => handleChange("name", e.target.value)}
-            className="border rounded p-2 w-full"
+            className="flex-1 border rounded p-2"
           />
+          <button
+            type="button"
+            onClick={() => randomField("name")}
+            className="ml-2 p-2 rounded bg-gray-200 hover:bg-gray-300"
+            title="随机生成姓名"
+          >
+            🔄
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => randomField("name")}
-          className="ml-2 p-2 rounded bg-gray-200 hover:bg-gray-300"
-          title="随机生成"
-        >
-          <RotateCw size={18} />
-        </button>
       </div>
 
       {/* 学号 */}
-      <div className="border rounded-lg p-4 bg-gray-50 flex items-center">
-        <div className="flex-1">
-          <label className="block text-sm font-semibold mb-1">学号</label>
+      <div>
+        <label className="block font-medium mb-1">学号</label>
+        <div className="flex">
           <input
-            value={data.id}
+            type="text"
+            value={form.id}
             onChange={(e) => handleChange("id", e.target.value)}
-            className="border rounded p-2 w-full"
+            className="flex-1 border rounded p-2"
           />
+          <button
+            type="button"
+            onClick={() => randomField("id")}
+            className="ml-2 p-2 rounded bg-gray-200 hover:bg-gray-300"
+            title="随机生成学号"
+          >
+            🔄
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => randomField("id")}
-          className="ml-2 p-2 rounded bg-gray-200 hover:bg-gray-300"
-          title="随机生成"
-        >
-          <RotateCw size={18} />
-        </button>
       </div>
 
       {/* 专业 */}
-      <div className="border rounded-lg p-4 bg-gray-50 flex items-center">
-        <div className="flex-1">
-          <label className="block text-sm font-semibold mb-1">专业</label>
+      <div>
+        <label className="block font-medium mb-1">专业</label>
+        <div className="flex">
           <input
-            value={data.faculty}
+            type="text"
+            value={form.faculty}
             onChange={(e) => handleChange("faculty", e.target.value)}
-            className="border rounded p-2 w-full"
+            className="flex-1 border rounded p-2"
           />
+          <button
+            type="button"
+            onClick={() => randomField("faculty")}
+            className="ml-2 p-2 rounded bg-gray-200 hover:bg-gray-300"
+            title="随机生成专业"
+          >
+            🔄
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={() => randomField("faculty")}
-          className="ml-2 p-2 rounded bg-gray-200 hover:bg-gray-300"
-          title="随机生成"
-        >
-          <RotateCw size={18} />
-        </button>
       </div>
 
-      {/* 照片上传 + 随机照片 */}
-      <div className="border rounded-lg p-4 bg-gray-50">
-        <label className="block text-sm font-semibold mb-1">上传照片</label>
-        <input type="file" onChange={(e) => {
-          const reader = new FileReader();
-          reader.onload = () => setData({ ...data, photo: reader.result });
-          reader.readAsDataURL(e.target.files[0]);
-        }} />
-        <button
-          type="button"
-          onClick={randomPhoto}
-          className="mt-2 bg-indigo-600 text-white px-3 py-1 rounded"
-        >
-          随机照片
-        </button>
+      {/* 签发日期 */}
+      <div>
+        <label className="block font-medium mb-1">签发日期</label>
+        <input
+          type="date"
+          value={form.issueDate}
+          onChange={(e) => handleChange("issueDate", e.target.value)}
+          className="w-full border rounded p-2"
+        />
       </div>
 
+      {/* 有效期至 */}
+      <div>
+        <label className="block font-medium mb-1">有效期至</label>
+        <input
+          type="date"
+          value={form.validUntil}
+          onChange={(e) => handleChange("validUntil", e.target.value)}
+          className="w-full border rounded p-2"
+        />
+      </div>
+
+      {/* 上传照片 */}
+      <div>
+        <label className="block font-medium mb-1">上传照片</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleChange("photo", e.target.files[0])}
+          className="w-full border rounded p-2"
+        />
+      </div>
+
+      {/* 上传校徽 */}
+      <div>
+        <label className="block font-medium mb-1">上传校徽</label>
+        <input
+          type="file"
+          accept="image/*"
+          onChange={(e) => handleChange("logo", e.target.files[0])}
+          className="w-full border rounded p-2"
+        />
+      </div>
     </div>
   );
 }
