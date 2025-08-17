@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+// 全局集合，避免重复
+const usedIds = new Set();
+const usedNames = new Set();
+
 export default function InputForm({ data, onChange }) {
   const updateField = (field, value) => {
     onChange({ ...data, [field]: value });
@@ -19,19 +23,44 @@ export default function InputForm({ data, onChange }) {
     return `/avatars/men/${id}.jpg`; // 直接引用 public 下的文件
   };
 
+  // 生成唯一学号
+  const generateUniqueId = () => {
+    let newId;
+    do {
+      newId = "INT" + Math.floor(100000 + Math.random() * 900000); // 6位数
+    } while (usedIds.has(newId));
+    usedIds.add(newId);
+    return newId;
+  };
+
+  // 生成唯一姓名
+  const generateUniqueName = (firstNames, lastNames) => {
+    let fullName;
+    let first, last;
+    do {
+      first = firstNames[Math.floor(Math.random() * firstNames.length)];
+      last = lastNames[Math.floor(Math.random() * lastNames.length)];
+      fullName = `${first} ${last}`;
+    } while (usedNames.has(fullName));
+    usedNames.add(fullName);
+    return { first, last };
+  };
+
   // 一键随机生成资料
   const generateRandomAll = () => {
-    const randomId = "INT" + Math.floor(Math.random() * 1000000);
     const majors = ["Computer Science", "Mechanical Eng.", "Mathematics", "Physics"];
     const firstNames = ["Anand", "Meera", "Ravi", "Erick", "Sophia"];
     const lastNames = ["Kumar", "Sharma", "Singh", "Patel", "Verma"];
 
+    const { first, last } = generateUniqueName(firstNames, lastNames);
+    const randomId = generateUniqueId();
+
     onChange({
-      firstName: firstNames[Math.floor(Math.random() * firstNames.length)],
-      lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
+      firstName: first,
+      lastName: last,
       id: randomId,
       major: majors[Math.floor(Math.random() * majors.length)],
-      photo: generateRandomAvatar(), // ✅ 本地头像
+      photo: generateRandomAvatar(),
     });
   };
 
