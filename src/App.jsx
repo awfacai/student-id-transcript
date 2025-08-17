@@ -11,7 +11,7 @@ export default function App() {
     name: "",
     id: "",
     major: "",
-    photo: "", // 照片直接放这里
+    photo: "",
     courses: [
       { name: "Mathematics", grade: "A" },
       { name: "Physics", grade: "B+" },
@@ -19,21 +19,20 @@ export default function App() {
     ],
   });
 
-  // 更新某个字段
   const handleChange = (field, value) => {
     setData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // 随机生成全部信息
+  // 随机生成所有信息（带随机头像）
   const handleRandom = async () => {
     const randomName = ["Rahul Sharma", "Ananya Gupta", "Erick Schimmel", "Li Wei", "John Doe"];
     const randomMajors = ["Computer Science", "Electrical Engineering", "Mechanical", "Mathematics", "Physics"];
     const randomId = Math.random().toString(36).substring(2, 8).toUpperCase();
 
-    // 头像
-    const gender = Math.random() > 0.5 ? "men" : "women";
-    const idNum = Math.floor(Math.random() * 90);
-    const randomPhoto = `https://randomuser.me/api/portraits/${gender}/${idNum}.jpg`;
+    // 调用 randomuser.me API 获取头像
+    const res = await fetch("https://randomuser.me/api/");
+    const user = await res.json();
+    const randomPhoto = user.results[0].picture.large;
 
     setData({
       uni: "Indian Institute of Technology Bombay",
@@ -49,7 +48,6 @@ export default function App() {
     });
   };
 
-  // 下载 PDF
   const handleDownload = async () => {
     const element = document.getElementById("preview-area");
     const canvas = await html2canvas(element);
@@ -67,14 +65,14 @@ export default function App() {
         </h1>
       </header>
 
-      <main className="max-w-7xl mx-auto p-6 grid grid-cols-2 gap-6">
-        {/* 左边表单 */}
+      <main className="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* 左侧表单 */}
         <div className="bg-white rounded-xl shadow p-6">
           <h2 className="text-lg font-semibold mb-4">📋 填写信息</h2>
           <InputForm onChange={handleChange} onRandom={handleRandom} data={data} />
         </div>
 
-        {/* 右边预览 */}
+        {/* 右侧预览 */}
         <div id="preview-area" className="space-y-6">
           <IDCardPreview data={data} />
           <TranscriptPreview data={data} />
