@@ -4,7 +4,30 @@ import { useState } from "react";
 const usedIds = new Set();
 const usedNames = new Set();
 
+// 随机字母串（4-6位）
+const randomString = () => {
+  const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const length = Math.floor(Math.random() * 3) + 4; // 4 ~ 6
+  let result = "";
+  for (let i = 0; i < length; i++) {
+    result += letters.charAt(Math.floor(Math.random() * letters.length));
+  }
+  return result;
+};
+
+// 生成唯一学号
+const generateUniqueId = () => {
+  let newId;
+  do {
+    newId = "INT" + Math.floor(100000 + Math.random() * 900000); // INT + 6位数字
+  } while (usedIds.has(newId));
+  usedIds.add(newId);
+  return newId;
+};
+
 export default function InputForm({ data, onChange }) {
+  const [copiedField, setCopiedField] = useState(null);
+
   const updateField = (field, value) => {
     onChange({ ...data, [field]: value });
   };
@@ -17,42 +40,23 @@ export default function InputForm({ data, onChange }) {
     }
   };
 
-  // ✅ 使用本地 public/avatars/men 的头像
+  // 使用本地 public/avatars/men 的头像
   const generateRandomAvatar = () => {
     const id = Math.floor(Math.random() * 99) + 1; // 1 - 99
-    return `/avatars/men/${id}.jpg`; // 直接引用 public 下的文件
-  };
-
-  // 生成唯一学号
-  const generateUniqueId = () => {
-    let newId;
-    do {
-      newId = "INT" + Math.floor(100000 + Math.random() * 900000); // 6位数
-    } while (usedIds.has(newId));
-    usedIds.add(newId);
-    return newId;
-  };
-
-  // 生成唯一姓名
-  const generateUniqueName = (firstNames, lastNames) => {
-    let fullName;
-    let first, last;
-    do {
-      first = firstNames[Math.floor(Math.random() * firstNames.length)];
-      last = lastNames[Math.floor(Math.random() * lastNames.length)];
-      fullName = `${first} ${last}`;
-    } while (usedNames.has(fullName));
-    usedNames.add(fullName);
-    return { first, last };
+    return `/avatars/men/${id}.jpg`;
   };
 
   // 一键随机生成资料
   const generateRandomAll = () => {
     const majors = ["Computer Science", "Mechanical Eng.", "Mathematics", "Physics"];
-    const firstNames = ["Anand", "Meera", "Ravi", "Erick", "Sophia"];
-    const lastNames = ["Kumar", "Sharma", "Singh", "Patel", "Verma"];
+    let first, last, fullName;
+    do {
+      first = randomString();
+      last = randomString();
+      fullName = `${first} ${last}`;
+    } while (usedNames.has(fullName));
+    usedNames.add(fullName);
 
-    const { first, last } = generateUniqueName(firstNames, lastNames);
     const randomId = generateUniqueId();
 
     onChange({
@@ -64,10 +68,13 @@ export default function InputForm({ data, onChange }) {
     });
   };
 
-  // 复制功能（静默复制）
-  const copyToClipboard = (text) => {
+  // 复制功能 + ✅ 动态反馈
+  const copyToClipboard = (field, text) => {
     if (!text) return;
-    navigator.clipboard.writeText(text).catch((err) => console.error("复制失败", err));
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(null), 1000); // 1s 后恢复
+    });
   };
 
   return (
@@ -93,10 +100,10 @@ export default function InputForm({ data, onChange }) {
           />
           <button
             type="button"
-            onClick={() => copyToClipboard(data.firstName)}
+            onClick={() => copyToClipboard("firstName", data.firstName)}
             className="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300"
           >
-            📋
+            {copiedField === "firstName" ? "✅" : "📋"}
           </button>
         </div>
       </div>
@@ -112,10 +119,10 @@ export default function InputForm({ data, onChange }) {
           />
           <button
             type="button"
-            onClick={() => copyToClipboard(data.lastName)}
+            onClick={() => copyToClipboard("lastName", data.lastName)}
             className="px-3 py-2 bg-gray-200 rounded hover:bg-gray-300"
           >
-            📋
+            {copiedField === "lastName" ? "✅" : "📋"}
           </button>
         </div>
       </div>
