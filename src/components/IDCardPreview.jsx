@@ -30,11 +30,18 @@ export default function IDCardPreview({ data }) {
 
         {/* 内容 */}
         <div className="p-4 flex space-x-4">
-          <img
-            src={data.photo || "/default-avatar.png"}
-            alt="student"
-            className="w-24 h-24 rounded-md object-cover border"
-          />
+<img
+  src={
+    typeof data.photo === "string"
+      ? data.photo
+      : data.photo
+      ? URL.createObjectURL(data.photo)
+      : "/default-avatar.png"
+  }
+  alt="学生照片"
+  className="w-full h-full object-cover"
+/>
+
           <div className="text-left space-y-1">
             <p><strong>NAME:</strong> {data.firstName || "未填"} {data.lastName || ""}</p>
             <p><strong>STUDENT ID:</strong> {data.id || "未填"}</p>
