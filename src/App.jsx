@@ -6,10 +6,11 @@ import TranscriptPreview from "./components/TranscriptPreview";
 export default function App() {
   const [data, setData] = useState({
     university: "Indian Institute of Technology Bombay",
-    name: "",
+    firstName: "",
+    lastName: "",
     id: "",
     major: "",
-    photo: "", // 统一存储头像
+    photo: "",
     courses: [
       { name: "Mathematics", grade: "A" },
       { name: "Physics", grade: "B+" },
