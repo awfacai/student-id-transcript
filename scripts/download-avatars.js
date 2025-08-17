@@ -1,7 +1,7 @@
 // scripts/download-avatars.js
-import fs from "fs";
-import path from "path";
-import https from "https";
+const fs = require("fs");
+const path = require("path");
+const https = require("https");
 
 const baseUrl = "https://student.frp.gs/static/image/men";
 const targetDir = path.resolve("public/avatars/men");
