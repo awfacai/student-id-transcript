@@ -17,7 +17,7 @@ export default function InputForm({ data, onChange }) {
     }
   };
 
-  // 真人随机头像
+  // 真人随机头像 (异步函数)
   const generateRandomAvatar = async () => {
     try {
       const response = await fetch("https://randomuser.me/api/");
@@ -30,7 +30,7 @@ export default function InputForm({ data, onChange }) {
     }
   };
 
-  // 一键随机生成资料
+  // 一键随机生成资料 (异步函数)
   const generateRandomAll = async () => {
     const randomId = "INT" + Math.floor(Math.random() * 1000000);
     const majors = ["Computer Science", "Mechanical Eng.", "Mathematics", "Physics"];
@@ -113,6 +113,7 @@ export default function InputForm({ data, onChange }) {
           )}
           <button
             type="button"
+            // 修复点: 使用 async 和 await
             onClick={async () => updateField("photo", await generateRandomAvatar())}
             className="bg-blue-500 text-white px-3 py-2 rounded-lg"
           >
@@ -124,6 +125,7 @@ export default function InputForm({ data, onChange }) {
       {/* 一键随机 */}
       <button
         type="button"
+        // 修复点: 依然保持异步调用
         onClick={generateRandomAll}
         className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg mt-4"
       >
