@@ -6,42 +6,37 @@ export default function InputForm({ data, onChange }) {
   };
 
   // 上传头像
-// 真人随机头像
-const generateRandomAvatar = () => {
-  const gender = Math.random() > 0.5 ? "men" : "women";
-  const id = Math.floor(Math.random() * 90); // 0 - 89
-  return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
-};
+  const handlePhotoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        updateField("photo", reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
+  // 真人随机头像（直接图片 URL，不走 fetch）
+  const generateRandomAvatar = () => {
+    const gender = Math.random() > 0.5 ? "men" : "women";
+    const id = Math.floor(Math.random() * 90); // 0 - 89
+    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+  };
 
-  // 真人随机头像 (异步函数)
-const generateRandomAvatar = async () => {
-  try {
-    // 使用代理路径
-    const response = await fetch("/api/");
-    const data = await response.json();
-    const photoUrl = data.results[0].picture.large;
-    return photoUrl;
-  } catch (error) {
-    console.error("Failed to fetch random avatar:", error);
-    return null;
-  }
-};
-
-  // 一键随机生成资料 (异步函数)
-  const generateRandomAll = async () => {
+  // 一键随机生成资料
+  const generateRandomAll = () => {
     const randomId = "INT" + Math.floor(Math.random() * 1000000);
     const majors = ["Computer Science", "Mechanical Eng.", "Mathematics", "Physics"];
     const firstNames = ["Anand", "Meera", "Ravi", "Erick", "Sophia"];
     const lastNames = ["Kumar", "Sharma", "Singh", "Patel", "Verma"];
-    const randomPhoto = await generateRandomAvatar();
 
     onChange({
       firstName: firstNames[Math.floor(Math.random() * firstNames.length)],
       lastName: lastNames[Math.floor(Math.random() * lastNames.length)],
       id: randomId,
       major: majors[Math.floor(Math.random() * majors.length)],
-      photo: randomPhoto,
+      photo: generateRandomAvatar(),
     });
   };
 
@@ -61,7 +56,7 @@ const generateRandomAvatar = async () => {
         <label className="block text-sm font-medium">First Name*</label>
         <input
           type="text"
-          value={data.firstName}
+          value={data.firstName || ""}
           onChange={(e) => updateField("firstName", e.target.value)}
           className="w-full border rounded px-3 py-2"
         />
@@ -71,7 +66,7 @@ const generateRandomAvatar = async () => {
         <label className="block text-sm font-medium">Last Name*</label>
         <input
           type="text"
-          value={data.lastName}
+          value={data.lastName || ""}
           onChange={(e) => updateField("lastName", e.target.value)}
           className="w-full border rounded px-3 py-2"
         />
@@ -81,7 +76,7 @@ const generateRandomAvatar = async () => {
         <label className="block text-sm font-medium">学号</label>
         <input
           type="text"
-          value={data.id}
+          value={data.id || ""}
           onChange={(e) => updateField("id", e.target.value)}
           className="w-full border rounded px-3 py-2"
         />
@@ -91,7 +86,7 @@ const generateRandomAvatar = async () => {
         <label className="block text-sm font-medium">专业</label>
         <input
           type="text"
-          value={data.major}
+          value={data.major || ""}
           onChange={(e) => updateField("major", e.target.value)}
           className="w-full border rounded px-3 py-2"
         />
@@ -111,8 +106,7 @@ const generateRandomAvatar = async () => {
           )}
           <button
             type="button"
-            // 修复点: 使用 async 和 await
-            onClick={async () => updateField("photo", await generateRandomAvatar())}
+            onClick={() => updateField("photo", generateRandomAvatar())}
             className="bg-blue-500 text-white px-3 py-2 rounded-lg"
           >
             🎲 随机头像
@@ -123,7 +117,6 @@ const generateRandomAvatar = async () => {
       {/* 一键随机 */}
       <button
         type="button"
-        // 修复点: 依然保持异步调用
         onClick={generateRandomAll}
         className="w-full bg-purple-600 text-white px-4 py-2 rounded-lg mt-4"
       >
