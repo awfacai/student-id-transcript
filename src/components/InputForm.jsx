@@ -17,11 +17,10 @@ export default function InputForm({ data, onChange }) {
     }
   };
 
-  // 真人随机头像（直接图片 URL，不走 fetch）
+  // 真人随机头像 (使用 student.frp.gs)
   const generateRandomAvatar = () => {
-    const gender = Math.random() > 0.5 ? "men" : "women";
-    const id = Math.floor(Math.random() * 90); // 0 - 89
-    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+    const id = Math.floor(Math.random() * 99) + 1; // 1 - 99
+    return `https://student.frp.gs/static/image/men/${id}.jpg`;
   };
 
   // 一键随机生成资料
@@ -40,6 +39,14 @@ export default function InputForm({ data, onChange }) {
     });
   };
 
+  // 复制功能
+  const copyToClipboard = (text) => {
+    if (text) {
+      navigator.clipboard.writeText(text);
+      alert("已复制: " + text);
+    }
+  };
+
   return (
     <form className="space-y-4">
       <div>
@@ -52,24 +59,44 @@ export default function InputForm({ data, onChange }) {
         />
       </div>
 
+      {/* First Name */}
       <div>
         <label className="block text-sm font-medium">First Name*</label>
-        <input
-          type="text"
-          value={data.firstName || ""}
-          onChange={(e) => updateField("firstName", e.target.value)}
-          className="w-full border rounded px-3 py-2"
-        />
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            value={data.firstName || ""}
+            onChange={(e) => updateField("firstName", e.target.value)}
+            className="flex-1 border rounded px-3 py-2"
+          />
+          <button
+            type="button"
+            onClick={() => copyToClipboard(data.firstName)}
+            className="bg-gray-200 px-3 py-2 rounded hover:bg-gray-300"
+          >
+            📋
+          </button>
+        </div>
       </div>
 
+      {/* Last Name */}
       <div>
         <label className="block text-sm font-medium">Last Name*</label>
-        <input
-          type="text"
-          value={data.lastName || ""}
-          onChange={(e) => updateField("lastName", e.target.value)}
-          className="w-full border rounded px-3 py-2"
-        />
+        <div className="flex space-x-2">
+          <input
+            type="text"
+            value={data.lastName || ""}
+            onChange={(e) => updateField("lastName", e.target.value)}
+            className="flex-1 border rounded px-3 py-2"
+          />
+          <button
+            type="button"
+            onClick={() => copyToClipboard(data.lastName)}
+            className="bg-gray-200 px-3 py-2 rounded hover:bg-gray-300"
+          >
+            📋
+          </button>
+        </div>
       </div>
 
       <div>
