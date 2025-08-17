@@ -1,14 +1,8 @@
 export default function IDCardPreview({ data }) {
   if (!data) return null;
 
-  // 如果没有照片，生成随机人像
-  const randomPhoto = () => {
-    const gender = Math.random() > 0.5 ? "men" : "women";
-    const id = Math.floor(Math.random() * 90); // 0-89
-    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
-  };
-
-  const photoUrl = data.photo || randomPhoto();
+  // 如果没有照片，就显示默认头像
+  const photoUrl = data.photo || "/default-avatar.png";
 
   return (
     <div className="bg-white shadow rounded-xl p-6">
@@ -20,13 +14,28 @@ export default function IDCardPreview({ data }) {
           alt="student"
           className="w-24 h-24 object-cover rounded-full border"
         />
-        {/* 右边文字 */}
+
+        {/* 右边信息 */}
         <div>
-          <img src="/logo.png" alt="logo" className="h-10 mb-2" />
-          <p><strong>大学：</strong> Indian Institute of Technology Bombay</p>
-          <p><strong>姓名：</strong> {data.name || "未填写"}</p>
-          <p><strong>学号：</strong> {data.id || "未填写"}</p>
-          <p><strong>专业：</strong> {data.major || "未填写"}</p>
+          {/* 固定 IIT Bombay 校徽 */}
+          <img
+            src="/iitb-logo.png"
+            alt="IIT Bombay Logo"
+            className="h-10 mb-2"
+          />
+
+          <p>
+            <strong>大学：</strong> Indian Institute of Technology Bombay
+          </p>
+          <p>
+            <strong>姓名：</strong> {data.name || "未填写"}
+          </p>
+          <p>
+            <strong>学号：</strong> {data.id || "未填写"}
+          </p>
+          <p>
+            <strong>专业：</strong> {data.major || "未填写"}
+          </p>
         </div>
       </div>
     </div>
