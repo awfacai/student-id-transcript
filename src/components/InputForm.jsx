@@ -47,7 +47,7 @@ export default function InputForm({ data, onChange }) {
         <label className="block text-sm font-medium">大学</label>
         <input
           type="text"
-          value="FIITJEE Hyderabad"
+          value="Kjit (Vadodara)"
           disabled
           className="w-full border rounded px-3 py-2 bg-gray-100"
         />
