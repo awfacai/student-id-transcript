@@ -30,7 +30,7 @@ export default function IDCardPreview({ data }) {
             className="h-10 mr-2 bg-white rounded"
           />
           <div>
-            <h3 className="font-bold">FIITJEE Hyderabad</h3>
+            <h3 className="font-bold">Kjit (Vadodara)</h3>
             <p className="text-xs">INTERNATIONAL STUDENT ID CARD</p>
           </div>
         </div>
