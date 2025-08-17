@@ -1,83 +1,38 @@
 import { useState } from "react";
-import { faker } from "@faker-js/faker";
 
-export default function InputForm({ onChange }) {
-  const [formData, setFormData] = useState({
-    university: "Indian Institute of Technology Bombay",
-    name: "",
-    id: "",
-    major: "",
-    photo: "",
-    courses: [
-      { name: "Mathematics", grade: "A" },
-      { name: "Physics", grade: "B+" },
-      { name: "Computer Science", grade: "A-" },
-    ],
-  });
+export default function InputForm({ onChange, onRandom }) {
+  const [photoPreview, setPhotoPreview] = useState(null);
 
-  // 🔄 更新数据
-  const updateField = (field, value) => {
-    const updated = { ...formData, [field]: value };
-    setFormData(updated);
-    onChange && onChange(updated);
+  // 处理文件上传（头像）
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setPhotoPreview(ev.target.result);
+        onChange("photo", ev.target.result); // 通知父组件
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  // 🔄 随机头像（只真人像）
-  const randomAvatar = () => {
+  // 随机头像
+  const handleRandomPhoto = () => {
     const gender = Math.random() > 0.5 ? "men" : "women";
     const id = Math.floor(Math.random() * 90); // 0-89
-    // 每次生成不同的 URL，避免浏览器缓存
-    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg?rand=${Date.now()}`;
-  };
-
-  // 🔄 随机单个字段
-  const randomField = (field) => {
-    let value;
-    switch (field) {
-      case "name":
-        value = faker.person.fullName();
-        break;
-      case "id":
-        value = faker.string.alphanumeric(8).toUpperCase();
-        break;
-      case "major":
-        value = faker.word.words(2);
-        break;
-      case "photo":
-        value = randomAvatar();
-        break;
-      default:
-        value = "";
-    }
-    updateField(field, value);
-  };
-
-  // 🔄 一键随机所有
-  const randomAll = () => {
-    const all = {
-      university: "Indian Institute of Technology Bombay",
-      name: faker.person.fullName(),
-      id: faker.string.alphanumeric(8).toUpperCase(),
-      major: faker.word.words(2),
-      photo: randomAvatar(),
-      courses: [
-        { name: "Mathematics", grade: "A" },
-        { name: "Physics", grade: "B+" },
-        { name: "Computer Science", grade: "A-" },
-      ],
-    };
-    setFormData(all);
-    onChange && onChange(all);
+    const url = `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+    setPhotoPreview(url);
+    onChange("photo", url);
   };
 
   return (
-    <form className="space-y-4">
-      {/* 大学 */}
+    <div className="space-y-4">
+      {/* 大学名称 */}
       <div>
         <label className="block font-medium mb-1">大学</label>
         <input
           type="text"
-          value={formData.university}
+          value="Indian Institute of Technology Bombay"
           readOnly
           className="w-full border rounded p-2 bg-gray-100"
         />
@@ -86,100 +41,64 @@ export default function InputForm({ onChange }) {
       {/* 姓名 */}
       <div>
         <label className="block font-medium mb-1">姓名</label>
-        <div className="flex items-center space-x-2">
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => updateField("name", e.target.value)}
-            className="flex-1 border rounded p-2"
-          />
-          <button
-            type="button"
-            onClick={() => randomField("name")}
-            className="p-2 bg-gray-200 rounded hover:bg-gray-300"
-          >
-            🔄
-          </button>
-        </div>
+        <input
+          type="text"
+          onChange={(e) => onChange("name", e.target.value)}
+          className="w-full border rounded p-2"
+        />
       </div>
 
       {/* 学号 */}
       <div>
         <label className="block font-medium mb-1">学号</label>
-        <div className="flex items-center space-x-2">
-          <input
-            type="text"
-            value={formData.id}
-            onChange={(e) => updateField("id", e.target.value)}
-            className="flex-1 border rounded p-2"
-          />
-          <button
-            type="button"
-            onClick={() => randomField("id")}
-            className="p-2 bg-gray-200 rounded hover:bg-gray-300"
-          >
-            🔄
-          </button>
-        </div>
+        <input
+          type="text"
+          onChange={(e) => onChange("id", e.target.value)}
+          className="w-full border rounded p-2"
+        />
       </div>
 
       {/* 专业 */}
       <div>
         <label className="block font-medium mb-1">专业</label>
-        <div className="flex items-center space-x-2">
-          <input
-            type="text"
-            value={formData.major}
-            onChange={(e) => updateField("major", e.target.value)}
-            className="flex-1 border rounded p-2"
-          />
-          <button
-            type="button"
-            onClick={() => randomField("major")}
-            className="p-2 bg-gray-200 rounded hover:bg-gray-300"
-          >
-            🔄
-          </button>
-        </div>
+        <input
+          type="text"
+          onChange={(e) => onChange("major", e.target.value)}
+          className="w-full border rounded p-2"
+        />
       </div>
 
-      {/* 照片 + 预览 */}
+      {/* 照片上传 */}
       <div>
         <label className="block font-medium mb-1">照片</label>
-        <div className="flex items-center space-x-2">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) =>
-              updateField("photo", URL.createObjectURL(e.target.files[0]))
-            }
-            className="flex-1 border rounded p-2"
-          />
-          <button
-            type="button"
-            onClick={() => randomField("photo")}
-            className="p-2 bg-gray-200 rounded hover:bg-gray-300"
-          >
-            🔄
-          </button>
-        </div>
-        {formData.photo && (
+        <input type="file" accept="image/*" onChange={handleFileChange} />
+        {/* 头像预览 */}
+        {photoPreview && (
           <img
-            src={formData.photo}
+            src={photoPreview}
             alt="preview"
-            className="mt-2 w-24 h-24 object-cover rounded-full border"
+            className="mt-2 w-24 h-24 rounded-full border object-cover"
           />
         )}
       </div>
 
-      {/* 一键填充 */}
-      <button
-        type="button"
-        onClick={randomAll}
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-      >
-        🎲 一键随机生成所有信息
-      </button>
-    </form>
+      {/* 随机生成按钮 */}
+      <div className="flex space-x-2">
+        <button
+          type="button"
+          onClick={onRandom}
+          className="w-full bg-blue-600 text-white p-2 rounded"
+        >
+          🎲 一键随机生成所有信息
+        </button>
+        <button
+          type="button"
+          onClick={handleRandomPhoto}
+          className="bg-gray-600 text-white p-2 rounded"
+        >
+          🔄 随机头像
+        </button>
+      </div>
+    </div>
   );
 }
