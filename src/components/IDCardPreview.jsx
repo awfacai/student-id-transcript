@@ -1,42 +1,33 @@
 export default function IDCardPreview({ data }) {
   if (!data) return null;
 
+  // 如果没有照片，生成随机人像
+  const randomPhoto = () => {
+    const gender = Math.random() > 0.5 ? "men" : "women";
+    const id = Math.floor(Math.random() * 90); // 0-89
+    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+  };
+
+  const photoUrl = data.photo || randomPhoto();
+
   return (
-    <div className="bg-white rounded-xl shadow p-6 text-center">
-      <h2 className="text-lg font-semibold mb-4">🎫 学生证预览</h2>
-
-      {/* 校徽 */}
-      <img
-        src={data.logo || "/iitb_logo.png"}
-        alt="校徽"
-        className="h-16 mx-auto mb-4"
-      />
-
-      {/* 照片 */}
-      <div className="w-32 h-32 mx-auto mb-4 border rounded overflow-hidden">
-        {data.photo ? (
-          <img
-            src={typeof data.photo === "string" ? data.photo : URL.createObjectURL(data.photo)}
-            alt="学生照片"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="flex items-center justify-center w-full h-full bg-gray-200 text-gray-500">
-            无照片
-          </div>
-        )}
-      </div>
-
-      {/* 信息 */}
-      <p className="font-bold text-xl">{data.name || "学生姓名"}</p>
-      <p className="text-gray-700">{data.university || "大学名称"}</p>
-      <p className="text-gray-700">学号: {data.id || "------"}</p>
-      <p className="text-gray-700">专业: {data.faculty || "------"}</p>
-
-      {/* 日期 */}
-      <div className="mt-4 text-sm text-gray-600">
-        <p>签发日期: {data.issueDate || "YYYY-MM-DD"}</p>
-        <p>有效期至: {data.validUntil || "YYYY-MM-DD"}</p>
+    <div className="bg-white shadow rounded-xl p-6">
+      <h2 className="text-lg font-semibold mb-4">🪪 学生证预览</h2>
+      <div className="border p-4 rounded-lg flex items-center space-x-4">
+        {/* 左边头像 */}
+        <img
+          src={photoUrl}
+          alt="student"
+          className="w-24 h-24 object-cover rounded-full border"
+        />
+        {/* 右边文字 */}
+        <div>
+          <img src="/logo.png" alt="logo" className="h-10 mb-2" />
+          <p><strong>大学：</strong> Indian Institute of Technology Bombay</p>
+          <p><strong>姓名：</strong> {data.name || "未填写"}</p>
+          <p><strong>学号：</strong> {data.id || "未填写"}</p>
+          <p><strong>专业：</strong> {data.major || "未填写"}</p>
+        </div>
       </div>
     </div>
   );
