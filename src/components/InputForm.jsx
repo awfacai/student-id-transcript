@@ -4,6 +4,30 @@ import { useState } from "react";
 const usedIds = new Set();
 const usedNames = new Set();
 
+// 学校列表
+const schools = [
+  { id: "kjit", name: "Kjit (Vadodara)", country: "India", logo: "/kjit-campus-logo-white.svg" },
+  { id: "tokyo", name: "University of Tokyo", country: "Japan", logo: "/logo.png" },
+  { id: "kyoto", name: "Kyoto University", country: "Japan", logo: "/logo.png" },
+  { id: "osaka", name: "Osaka University", country: "Japan", logo: "/logo.png" },
+  { id: "waseda", name: "Waseda University", country: "Japan", logo: "/logo.png" },
+  { id: "keio", name: "Keio University", country: "Japan", logo: "/logo.png" },
+  { id: "hokkaido", name: "Hokkaido University", country: "Japan", logo: "/logo.png" },
+  { id: "tsukuba", name: "University of Tsukuba", country: "Japan", logo: "/logo.png" },
+  { id: "harvard", name: "Harvard University", country: "USA", logo: "/logo.png" },
+  { id: "stanford", name: "Stanford University", country: "USA", logo: "/logo.png" },
+  { id: "mit", name: "Massachusetts Institute of Technology", country: "USA", logo: "/logo.png" },
+  { id: "berkeley", name: "University of California, Berkeley", country: "USA", logo: "/logo.png" },
+  { id: "yale", name: "Yale University", country: "USA", logo: "/logo.png" },
+  { id: "princeton", name: "Princeton University", country: "USA", logo: "/logo.png" },
+  { id: "columbia", name: "Columbia University", country: "USA", logo: "/logo.png" },
+  { id: "chicago", name: "University of Chicago", country: "USA", logo: "/logo.png" },
+  { id: "caltech", name: "California Institute of Technology", country: "USA", logo: "/logo.png" },
+  { id: "ucla", name: "University of California, Los Angeles", country: "USA", logo: "/logo.png" },
+  { id: "nyu", name: "New York University", country: "USA", logo: "/logo.png" },
+  { id: "cornell", name: "Cornell University", country: "USA", logo: "/logo.png" }
+];
+
 // 随机字母串（4-6位）
 const randomString = () => {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -48,7 +72,7 @@ export default function InputForm({ data, onChange }) {
 
   // 一键随机生成资料
   const generateRandomAll = () => {
-    const majors = ["Computer Science", "Mechanical Eng.", "Mathematics", "Physics"];
+    const majors = ["Computer Science", "Mechanical Eng.", "Mathematics", "Physics", "Medicine", "Engineering", "Business", "Arts"];
     let first, last, fullName;
     do {
       first = randomString();
@@ -58,6 +82,7 @@ export default function InputForm({ data, onChange }) {
     usedNames.add(fullName);
 
     const randomId = generateUniqueId();
+    const randomSchool = schools[Math.floor(Math.random() * schools.length)];
 
     onChange({
       firstName: first,
@@ -65,6 +90,7 @@ export default function InputForm({ data, onChange }) {
       id: randomId,
       major: majors[Math.floor(Math.random() * majors.length)],
       photo: generateRandomAvatar(),
+      school: randomSchool,
     });
   };
 
@@ -81,12 +107,20 @@ export default function InputForm({ data, onChange }) {
     <form className="space-y-4">
       <div>
         <label className="block text-sm font-medium">大学</label>
-        <input
-          type="text"
-          value="Kjit (Vadodara)"
-          disabled
-          className="w-full border rounded px-3 py-2 bg-gray-100"
-        />
+        <select
+          value={data.school?.id || "kjit"}
+          onChange={(e) => {
+            const selectedSchool = schools.find(s => s.id === e.target.value);
+            updateField("school", selectedSchool);
+          }}
+          className="w-full border rounded px-3 py-2"
+        >
+          {schools.map(school => (
+            <option key={school.id} value={school.id}>
+              {school.name} ({school.country})
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
