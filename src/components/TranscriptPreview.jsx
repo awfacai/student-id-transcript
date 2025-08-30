@@ -88,8 +88,8 @@ export default function TranscriptPreview({ data }) {
     }
   };
 
-  const courses = data.courses && data.courses.length > 0 ? data.courses : getDefaultCourses(school);
   const school = data.school || { name: "Kjit (Vadodara)", logo: "/kjit-campus-logo-white.svg" };
+  const courses = data.courses && data.courses.length > 0 ? data.courses : getDefaultCourses(school);
 
   // 根据学校生成默认评语
   const getDefaultRemarks = (school) => {
@@ -112,9 +112,10 @@ export default function TranscriptPreview({ data }) {
   // 计算平均GPA
   const calculateGPA = (courses) => {
     const totalCredits = calculateTotalCredits(courses);
-    if (totalCredits === 0) return "0.00";
+    if (totalCredits === 0) return "0.00 / 4.00";
     const totalGradePoints = courses.reduce((sum, course) => sum + (course.gpa * course.credits), 0);
-    return (totalGradePoints / totalCredits).toFixed(2);
+    const gpa = (totalGradePoints / totalCredits).toFixed(2);
+    return `${gpa} / 4.00`;
   };
 
   // 根据学校生成默认排名
