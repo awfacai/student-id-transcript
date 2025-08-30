@@ -10,6 +10,12 @@ export default function App() {
     id: "",
     major: "",
     photo: "",
+    school: {
+      id: "kjit",
+      name: "Kjit (Vadodara)",
+      country: "India",
+      logo: "/kjit-campus-logo-white.svg"
+    }
   });
 
   return (
