@@ -3,6 +3,18 @@ import html2canvas from "html2canvas";
 export default function IDCardPreview({ data }) {
   if (!data) return null;
 
+  // 生成动态日期
+  const getCurrentDate = () => {
+    const now = new Date();
+    return now.toISOString().split('T')[0];
+  };
+
+  const getValidUntilDate = () => {
+    const now = new Date();
+    const validUntil = new Date(now.getFullYear() + 4, now.getMonth(), now.getDate());
+    return validUntil.toISOString().split('T')[0];
+  };
+
   // 下载 PNG
   const downloadCard = () => {
     const element = document.getElementById("id-card");
@@ -15,6 +27,8 @@ export default function IDCardPreview({ data }) {
     });
   };
 
+  const school = data.school || { name: "Kjit (Vadodara)", logo: "/kjit-campus-logo-white.svg" };
+
   return (
     <div className="bg-white shadow rounded-xl p-6">
       <h2 className="text-lg font-semibold mb-4">🪪 学生证预览</h2>
@@ -25,12 +39,12 @@ export default function IDCardPreview({ data }) {
         {/* 顶部红色条 */}
         <div className="bg-red-600 text-white flex items-center px-4 py-2 rounded-t-lg">
           <img
-            src="/kjit-campus-logo-white.svg"
+            src={school.logo}
             alt="logo"
             className="h-10 mr-2 bg-white rounded"
           />
           <div>
-            <h3 className="font-bold">Kjit (Vadodara)</h3>
+            <h3 className="font-bold">{school.name}</h3>
             <p className="text-xs">INTERNATIONAL STUDENT ID CARD</p>
           </div>
         </div>
@@ -71,11 +85,11 @@ export default function IDCardPreview({ data }) {
         <div className="grid grid-cols-2 text-xs border-t mt-2">
           <div className="p-2">
             <p>ISSUE</p>
-            <p className="font-bold">2023-12-27</p>
+            <p className="font-bold">{getCurrentDate()}</p>
           </div>
           <div className="p-2 border-l">
             <p>VALID</p>
-            <p className="font-bold">2027-12-27</p>
+            <p className="font-bold">{getValidUntilDate()}</p>
           </div>
         </div>
       </div>
