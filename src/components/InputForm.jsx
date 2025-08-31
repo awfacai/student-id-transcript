@@ -16,7 +16,7 @@ const schools = [
   { id: "tsukuba", name: "University of Tsukuba", country: "Japan", logo: "/logo.png" },
   { id: "harvard", name: "Harvard University", country: "USA", logo: "/harvard-university.svg" },
   { id: "stanford", name: "Stanford University", country: "USA", logo: "/stanford-university.svg" },
-  { id: "mit", name: "Massachusetts Institute of Technology", country: "USA", logo: "/mit-university.svg" },
+  { id: "mit", name: "Massachusetts Institute of Technology", country: "USA", logo: "/349716e43cb210f02b1d766e18bcbd2c.gif" },
   { id: "berkeley", name: "University of California, Berkeley", country: "USA", logo: "/logo.png" },
   { id: "yale", name: "Yale University", country: "USA", logo: "/logo.png" },
   { id: "princeton", name: "Princeton University", country: "USA", logo: "/logo.png" },
