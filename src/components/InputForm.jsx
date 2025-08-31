@@ -8,7 +8,7 @@ const usedNames = new Set();
 const schools = [
   { id: "kjit", name: "Kjit (Vadodara)", country: "India", logo: "/kjit-campus-logo-white.svg" },
   { id: "tokyo", name: "University of Tokyo", country: "Japan", logo: "/tokyo-university.svg" },
-  { id: "kyoto", name: "Kyoto University", country: "Japan", logo: "/kyoto-university.svg" },
+  { id: "kyoto", name: "Kyoto University", country: "Japan", logo: "/kyoto-university.png" },
   { id: "osaka", name: "Osaka University", country: "Japan", logo: "/osaka-university.svg" },
   { id: "waseda", name: "Waseda University", country: "Japan", logo: "/waseda-university.svg" },
   { id: "keio", name: "Keio University", country: "Japan", logo: "/logo.png" },
