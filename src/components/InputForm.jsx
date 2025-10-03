@@ -6,7 +6,7 @@ const usedNames = new Set();
 
 // 学校列表
 const schools = [
-  { id: "kjit", name: "Kjit (Vadodara)", country: "India", logo: "/kjit-campus-logo-white.svg" },
+  { id: "Kolping-Bildungswerk in der Diözese Rgb.e.V. (Weiden in der Oberpfalz)", name: "Kolping-Bildungswerk in der Diözese Rgb.e.V. (Weiden in der Oberpfalz)", country: "German", logo: "/Kolping-Bildungswerk.png },
   { id: "tokyo", name: "University of Tokyo", country: "Japan", logo: "/tokyo-university.svg" },
   { id: "kyoto", name: "Kyoto University", country: "Japan", logo: "/kyoto-university.png" },
   { id: "osaka", name: "Osaka University", country: "Japan", logo: "/osaka-university.svg" },
