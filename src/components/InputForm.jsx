@@ -12,7 +12,7 @@ const schools = [
     country: "USA",
     logo: "/Kolping-Bildungswerk.png"
   },
-  { id: "tokyo", name: "University of Tokyo", country: "Japan", logo: "/tokyo-university.svg" },
+  { id: "Nfe", name: "Nfe Norddeutscher Fachverband Elektro- Und Informationstechnik E.V. (Hamburg)", country: "USA", logo: "/nfe.png" },
   { id: "kyoto", name: "Kyoto University", country: "Japan", logo: "/kyoto-university.png" },
   { id: "osaka", name: "Osaka University", country: "Japan", logo: "/osaka-university.svg" },
   { id: "waseda", name: "Waseda University", country: "Japan", logo: "/waseda-university.svg" },
