@@ -18,7 +18,7 @@ export default function TranscriptPreview({ data }) {
   // 生成最近一个月的日期
   const getRecentDate = () => {
     const now = new Date();
-    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
+    const oneMonthAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
     return oneMonthAgo.toISOString().split('T')[0]; // 格式: YYYY-MM-DD
   };
 
