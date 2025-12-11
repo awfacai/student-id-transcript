@@ -13,7 +13,7 @@ const schools = [
     logo: "/Kolping-Bildungswerk.png"
   },
   { id: "Nfe", name: "Nfe Norddeutscher Fachverband Elektro- Und Informationstechnik E.V. (Hamburg)", country: "USA", logo: "/nfe.png" },
-  { id: "Royal", name: "Royal College of Obstetricians and Gynaecologists (London)", country: "USA", logo: "/Royal.png" },
+  { id: "Royal", name: "Royale College of Beauty and Barbering Temecula, CA", country: "USA", logo: "/Royal.png" },
   { id: "osaka", name: "Osaka University", country: "Japan", logo: "/osaka-university.svg" },
   { id: "waseda", name: "Waseda University", country: "Japan", logo: "/waseda-university.svg" },
   { id: "keio", name: "Keio University", country: "Japan", logo: "/logo.png" },
